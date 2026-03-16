@@ -122,3 +122,6 @@ class Assignment1:
             print(f"Machine {id} Releasing binary semaphore")
             # Release the binary semaphore
             self.outer.binary.release()
+
+        def add():
+            --- 

@@ -23,7 +23,7 @@ class Assignment1:
     def startSimulation(self):
         # Create Machine and Printer threads
         # Write code here
-            
+        int acquired=6
         # Start all the threads
         # Write code here
 

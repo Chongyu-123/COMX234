@@ -21,8 +21,8 @@ class Assignment1:
         self.pThreads = []             # list for printer threads
         
         # Create semaphores
-        self.semaphore = threading.Semaphore(self.NUM_PRINTERS)  # counting semaphore
-        self.binary = threading.Semaphore(1)
+        #self.semaphore = threading.Semaphore(self.NUM_PRINTERS)  # counting semaphore
+        #self.binary = threading.Semaphore(1)
 
     def startSimulation(self):
         # Create Machine and Printer threads

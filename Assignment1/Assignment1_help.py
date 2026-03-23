@@ -123,5 +123,4 @@ class Assignment1:
             # Release the binary semaphore
             self.outer.binary.release()
 
-        def add():
-            --- 
+        

@@ -82,6 +82,11 @@ class Assignment1:
             print(f"Printer ID: {printerID} : now available")
             self.outer.print_list.queuePrint(printerID)
 
+            self.outer.mutex.acquire()
+            self.outer.print_list.queuePrint(printerID)
+            self.outer.mutex.release()
+            self.outer.empty.release()
+
     # Machine class
     class machineThread(threading.Thread):
         def __init__(self, machineID, outer):

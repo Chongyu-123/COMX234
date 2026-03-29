@@ -20,8 +20,8 @@ class Assignment1:
         self.mThreads = []             # list for machine threads
         self.pThreads = []             # list for printer threads
         
-        self.empty = threading.Semaphore(self.NUM_PRINTERS) 
-        self.mutes = threading.Semaphore(1)
+        self.empty = threading.Semaphore(self.NUM_PRINTERS)   #count the number of available printer
+        self.mutex = threading.Semaphore(1)  #protect print queue
     def startSimulation(self):
         # Create Machine and Printer threads
         # Write code here
@@ -73,6 +73,8 @@ class Assignment1:
                 # Grab the request at the head of the queue and print it
                 # Write code here
                 self.printDox(self.printerID)
+            
+            self.printDox(self.printerID)
 
         def printerSleep(self):
             sleepSeconds = random.randint(1, self.outer.MAX_PRINTER_SLEEP)
@@ -80,13 +82,15 @@ class Assignment1:
 
         def printDox(self, printerID):
             print(f"Printer ID: {printerID} : now available")
-            self.outer.print_list.queuePrint(printerID)
-
             self.outer.mutex.acquire()
-            self.outer.print_list.queuePrint(printerID)
-            self.outer.mutex.release()
-            self.outer.empty.release()
-
+            
+            try:  # printed when the queue is not empty
+                if self.outer.print_list.head is not None:    
+                    self.outer.print_list.queuePrint(printerID) #print the head task of the queue
+                    self.outer.empty.release()  #release empty signed after task processed
+                
+            finally:
+                    self.outer.mutex.release()    #release mutual exclusion lock
     # Machine class
     class machineThread(threading.Thread):
         def __init__(self, machineID, outer):
@@ -109,7 +113,7 @@ class Assignment1:
         def printRequest(self, id):
 
             self.outer.empty.acquire()
-            self.outer.mutex.aquire()
+            self.outer.mutex.acquire()
 
             print(f"Machine {id} Sent a print request")
             # Build a print document

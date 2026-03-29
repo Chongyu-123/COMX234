@@ -82,7 +82,7 @@ class Assignment1:
 
         def printDox(self, printerID):
             print(f"Printer ID: {printerID} : now available")
-            self.outer.mutex.acquire()
+            self.outer.mutex.acquire() 
             
             try:  # printed when the queue is not empty
                 if self.outer.print_list.head is not None:    
@@ -112,8 +112,8 @@ class Assignment1:
         
         def printRequest(self, id):
 
-            self.outer.empty.acquire()
-            self.outer.mutex.acquire()
+            self.outer.empty.acquire() #get the number of count sign ,wait for the avaliable printer
+            self.outer.mutex.acquire() # using a lock protect print queue
 
             print(f"Machine {id} Sent a print request")
             # Build a print document
@@ -121,5 +121,5 @@ class Assignment1:
             # Insert it in the print queue
             self.outer.print_list.queueInsert(doc)
 
-            self.outer.mutex.release()
+            self.outer.mutex.release()# unlock the protection
        

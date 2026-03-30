@@ -15,6 +15,7 @@ After you finish:
 - test the program,
 - rename this file to readers_writers.py if required by your instructor,
 - commit your work to GitHub with meaningful commit messages.
+four function
 """
 
 from __future__ import annotations
@@ -33,6 +34,8 @@ class ReadersWritersMonitor:
     - active_writers: 0 or 1
     - waiting_writers: number of writers waiting (optional, but useful)
     """
+    
+
 
     def __init__(self) -> None:
         self.lock = threading.Lock()
@@ -53,9 +56,15 @@ class ReadersWritersMonitor:
         3. Increase active_readers.
         4. Print a useful log message.
         """
+        
+
         with self.condition:
             # TODO: Replace 'pass' with your logic
-            pass
+            while self.active_writers > 0:  #wait while a writer is working
+                  print("Reader{reader_id} is waiting to read")
+                  self.condition.wait()
+            self.active_readers+=1
+            print("{reader_id} starts reading")
 
     def end_read(self, reader_id: int) -> None:
         """
@@ -66,10 +75,14 @@ class ReadersWritersMonitor:
         2. Print a useful log message.
         3. If this was the last reader, wake waiting threads.
         """
+
+        
         with self.condition:
             # TODO: Replace 'pass' with your logic
-            pass
-
+            self.active_readers -=1  #decrease reader's number
+            print("{reader_id} ending read ,Active reader = {self.active_re} ")                 
+            if self.active_readers == 0:
+                self.condition.notify_all() #wake all waiting threads
     def start_write(self, writer_id: int) -> None:
         """
         Called before a writer starts writing.
@@ -83,7 +96,8 @@ class ReadersWritersMonitor:
         """
         with self.condition:
             # TODO: Replace 'pass' with your logic
-            pass
+            while self.readers_count > 0 or self.end_write:
+
 
     def end_write(self, writer_id: int) -> None:
         """

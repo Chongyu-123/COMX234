@@ -199,10 +199,11 @@ def main() -> None:
     all_threads = readers + writers
     
     # TODO: Start all threads
-
+    for thread in all_threads:
+        thread.start()
     
     # TODO: Wait for all threads to finish
-
+    
 
     # TODO: Print final message that simulation completed
 

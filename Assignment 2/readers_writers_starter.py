@@ -41,7 +41,7 @@ class ReadersWritersMonitor:
         self.lock = threading.Lock()
         self.condition = threading.Condition(self.lock)
 
-        self.active_readers = 0
+        self.active_readers = 0  #condition at begin
         self.active_writers = 0
         self.waiting_writers = 0
 
@@ -60,11 +60,11 @@ class ReadersWritersMonitor:
 
         with self.condition:
             # TODO: Replace 'pass' with your logic
-            while self.active_writers > 0:  #wait while a writer is working
+            while self.active_writers > 0 :  #wait while a writer is working
                   print(f"Reader{reader_id} is waiting to read")
                   self.condition.wait()
             self.active_readers+=1
-            print(f"{reader_id} starts reading")
+            print(f"Reader {reader_id} starts reading , Active readers = {self.active_readers}") #show the active reader 
 
     def end_read(self, reader_id: int) -> None:
         """
@@ -81,8 +81,10 @@ class ReadersWritersMonitor:
             # TODO: Replace 'pass' with your logic
             self.active_readers -=1  #decrease reader's number
             print(f"{reader_id} ending read ,Active reader = {self.active_readers} ")                 
+            
+            
             if self.active_readers == 0:
-                self.condition.notify_all() #wake all waiting threads
+                self.condition.notify_all() #wake all waiting threads 
     def start_write(self, writer_id: int) -> None:
         """
         Called before a writer starts writing.
@@ -97,7 +99,7 @@ class ReadersWritersMonitor:
         with self.condition:
             # TODO: Replace 'pass' with your logic
             self.waiting_writers += 1
-            while self.readers_count > 0 or self.end_writers > 0:
+            while self.readers_count > 0 or self.end_writers > 0:  
                 print("writer{writer_id} is waiting to write")
                 self.waiting_writers.wait()
 
@@ -119,7 +121,10 @@ class ReadersWritersMonitor:
         """
         with self.condition:
             # TODO: Replace 'pass' with your logic
-            pass
+            self.active_writers -= 1;
+            print(f"writer {writer_id} ends writing ")
+
+            self.condition.notify_all() #wake up all reader and writer
 
 # Donot Change this
 class Reader(threading.Thread):
